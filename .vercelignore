@@ -1,0 +1,16 @@
+cloudflared.exe
+*.exe
+.venv
+venv
+env
+uploads
+projects
+exports
+tests
+test_unicode_doc.pdf
+test_with_images.docx
+server.log
+*.bat
+Dockerfile
+Procfile
+__pycache__
