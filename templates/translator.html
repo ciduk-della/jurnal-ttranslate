@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Journal & PDF Translator — Free Corat-Coret PPT</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/translator.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- PDF.js for in-page canvas PDF rendering (avoids black iframe issue) -->
+  <script src="/static/vendor/pdf.min.js"></script>
+</head>
+<body class="translator-body">
+  <div class="app-layout">
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <a href="/" class="btn-icon" title="Kembali ke Halaman Utama">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </a>
+        <div class="logo">
+          <span class="logo-icon">📚</span>
+          <span class="logo-text">AI Journal <strong>Translator</strong></span>
+          <span class="badge-free">DEEPL-LAYOUT</span>
+        </div>
+        <nav class="app-nav-tabs">
+          <a href="/" class="nav-tab">✏️ Corat-Coret PPT</a>
+          <a href="/translator" class="nav-tab active">📚 AI Journal Translator</a>
+        </nav>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-open-dictionary" class="btn btn-outline" title="Buka Kamus Istilah Teknik Sipil">
+          <span>📖 Kamus Istilah Sipil</span>
+        </button>
+
+        <button id="btn-open-settings" class="btn btn-outline" title="Pengaturan Engine & API Key">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <span>Pengaturan</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Translator Workspace -->
+    <div class="translator-workspace">
+      <!-- Left Panel: Upload & Controls -->
+      <aside class="translator-sidebar">
+        <!-- Upload Card -->
+        <div class="translator-card">
+          <div class="card-title">📄 Unggah Jurnal / Paper PDF</div>
+          <div id="translator-dropzone" class="translator-dropzone">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
+              <path d="M12 12v9"/>
+              <path d="m16 16-4-4-4 4"/>
+            </svg>
+            <p><strong>Tarik & Letakkan File PDF Jurnal</strong></p>
+            <span class="subtext">Artikel ilmiah, paper konferensi, tesis (.PDF)</span>
+            <button id="btn-browse-pdf" class="btn btn-primary btn-sm mt-2">Pilih File PDF</button>
+            <input type="file" id="translator-file-input" accept=".pdf" style="display: none;">
+          </div>
+        </div>
+
+        <!-- Document Info (Hidden initially) -->
+        <div id="doc-info-card" class="translator-card hidden">
+          <div class="card-title">📊 Info Dokumen</div>
+          <div class="doc-meta-item">
+            <span class="meta-label">Nama File:</span>
+            <span id="doc-meta-name" class="meta-val">-</span>
+          </div>
+          <div class="doc-meta-item">
+            <span class="meta-label">Total Halaman:</span>
+            <span id="doc-meta-pages" class="meta-val">-</span>
+          </div>
+          <div class="doc-meta-item">
+            <span class="meta-label">Bahasa Terdeteksi:</span>
+            <span id="doc-meta-lang" class="badge-lang">-</span>
+          </div>
+          <div class="doc-meta-item">
+            <span class="meta-label">Status OCR:</span>
+            <span id="doc-meta-ocr" class="meta-val text-success">Teks Digital (Siap)</span>
+          </div>
+
+          <div class="section-select-header mt-3">
+            <span>Bagian Dokumen Terdeteksi:</span>
+            <button id="btn-toggle-all-sections" class="btn-link">Pilih Semua</button>
+          </div>
+          <div id="detected-sections-list" class="detected-sections-list"></div>
+        </div>
+
+        <!-- Translation Settings Card -->
+        <div class="translator-card">
+          <div class="card-title">🌐 Pengaturan Terjemahan</div>
+          
+          <div class="form-group">
+            <label>Bahasa Sumber:</label>
+            <select id="source-lang-select" class="form-select">
+              <option value="auto">Auto Detect (Otomatis)</option>
+              <option value="en" selected>English (Inggris)</option>
+              <option value="de">German (Jerman)</option>
+              <option value="ja">Japanese (Jepang)</option>
+              <option value="zh-cn">Chinese (Mandarin)</option>
+              <option value="id">Indonesian (Indonesia)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Bahasa Tujuan:</label>
+            <select id="target-lang-select" class="form-select">
+              <option value="id" selected>Indonesian (Bahasa Indonesia)</option>
+              <option value="en">English (Inggris)</option>
+              <option value="ja">Japanese (Jepang)</option>
+              <option value="de">German (Jerman)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Fokus Domain:</label>
+            <div class="domain-pill">🏗️ Teknik Sipil & Struktur (Baku)</div>
+          </div>
+
+          <div class="preservation-toggles">
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-preserve-equations" checked>
+              <span>Pertahankan Rumus & Persamaan Matematika</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-preserve-references" checked>
+              <span>Pertahankan Sitasi & Format Referensi Penulis</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-preserve-terminology" checked>
+              <span>Terapkan Terminologi Teknik Sipil Konsisten</span>
+            </label>
+          </div>
+
+          <button id="btn-start-translation" class="btn btn-success btn-block btn-lg mt-3" disabled>
+            <span>🚀 Terjemahkan Dokumen Jurnal</span>
+          </button>
+        </div>
+
+        <!-- Quick Snippet Translator Accordion -->
+        <div class="translator-card">
+          <details>
+            <summary class="card-title pointer">⚡ Terjemahkan Teks Cepat</summary>
+            <div class="quick-translate-box mt-2">
+              <textarea id="quick-input-text" placeholder="Tempel kalimat atau paragraf abstrak di sini..." rows="3"></textarea>
+              <button id="btn-quick-translate" class="btn btn-primary btn-sm mt-2">Terjemahkan Teks</button>
+              <div id="quick-output-text" class="quick-output-text mt-2 hidden"></div>
+            </div>
+          </details>
+        </div>
+      </aside>
+
+      <!-- Right Panel: Viewer & Results -->
+      <main class="translator-main">
+        <!-- View Mode Navigation Bar -->
+        <div class="view-mode-bar">
+          <div class="view-tabs">
+            <button class="view-tab active" data-mode="mode1">
+              <span>📐 MODE A: Layout Asli (Gambar & Tabel Utuh)</span>
+            </button>
+            <button class="view-tab" data-mode="mode2">
+              <span>📄 MODE B: Teks Bersih (Clean Flow)</span>
+            </button>
+            <button class="view-tab" data-mode="mode3">
+              <span>⚖️ MODE C: Asli vs Terjemahan (Bilingual)</span>
+            </button>
+          </div>
+
+          <div class="export-actions">
+            <button id="btn-export-pdf" class="btn btn-primary btn-sm" title="Download PDF Terjemahan dengan Layout Asli, Gambar, dan Tabel Terjaga Utuh" disabled>
+              <span>📄 Download PDF (Layout & Gambar Asli)</span>
+            </button>
+            <button id="btn-export-docx" class="btn btn-outline btn-sm" title="Download Microsoft Word dengan Gambar Asli" disabled>
+              <span>📝 Word (DOCX + Gambar)</span>
+            </button>
+            <button id="btn-export-bilingual" class="btn btn-outline btn-sm" title="Download PDF Berdampingan Dua Bahasa" disabled>
+              <span>📑 PDF Bilingual</span>
+            </button>
+            <button id="btn-export-clean-pdf" class="btn btn-outline btn-sm" title="Download PDF Aliran Teks Baca Polos (Tanpa Gambar)" disabled>
+              <span>📄 PDF Teks Saja (Tanpa Gambar)</span>
+            </button>
+            <button id="btn-export-txt" class="btn btn-outline btn-sm" title="Download Teks Polos" disabled>
+              <span>📋 TXT</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress Overlay / Bar -->
+        <div id="translation-progress-bar-container" class="progress-bar-container hidden">
+          <div class="progress-label">
+            <span id="progress-status-text">Menerjemahkan dokumen...</span>
+            <span id="progress-percentage">0%</span>
+          </div>
+          <div class="progress-track">
+            <div id="progress-fill" class="progress-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Content Area -->
+        <div id="translator-content-area" class="translator-content-area">
+          <div id="empty-state-view" class="empty-state-card">
+            <div class="empty-icon">📖</div>
+            <h3>Belum Ada Dokumen Terbuka</h3>
+            <p>Unggah file jurnal PDF pada panel sebelah kiri untuk mulai membaca struktur dokumen, mendeteksi bahasa, dan menerjemahkan dengan mempertahankan gambar, tabel, diagram, dan layout asli.</p>
+          </div>
+
+          <!-- Mode 1: Mode A - PDF.js Canvas Viewer (original + translated) -->
+          <div id="view-mode1" class="mode-view layout-pdf-view-container hidden">
+            <div class="layout-viewer-toolbar">
+              <div class="viewer-switch-buttons">
+                <button id="btn-view-translated-pdf" class="btn-toggle active">📄 PDF Terjemahan</button>
+                <button id="btn-view-original-pdf" class="btn-toggle">📑 PDF Asli</button>
+              </div>
+              <div class="pdf-nav-controls">
+                <button id="btn-pdf-prev" class="btn-toggle" title="Halaman sebelumnya">◀</button>
+                <span id="pdf-page-info" class="pdf-page-label">Hal. 1 / 1</span>
+                <button id="btn-pdf-next" class="btn-toggle" title="Halaman berikutnya">▶</button>
+                <button id="btn-pdf-zoom-out" class="btn-toggle" title="Zoom out">🔍−</button>
+                <span id="pdf-zoom-label" class="pdf-page-label">100%</span>
+                <button id="btn-pdf-zoom-in" class="btn-toggle" title="Zoom in">🔍+</button>
+              </div>
+              <span class="layout-status-badge" id="pdf-viewer-status">📋 Unggah PDF untuk melihat pratinjau</span>
+            </div>
+            <!-- PDF.js Canvas Container -->
+            <div class="layout-iframe-wrapper" id="pdfjs-viewer-container">
+              <div id="pdfjs-loading" class="pdfjs-loading-overlay hidden">
+                <div class="pdfjs-spinner"></div>
+                <p>Memuat PDF...</p>
+              </div>
+              <div id="pdfjs-error" class="pdfjs-error-overlay hidden">
+                <span>⚠️</span>
+                <p id="pdfjs-error-msg">Gagal memuat PDF.</p>
+              </div>
+              <div id="pdfjs-canvas-wrapper">
+                <canvas id="pdfjs-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mode 2: Mode B - Clean Reading View -->
+          <div id="view-mode2" class="mode-view translation-only-container hidden"></div>
+
+          <!-- Mode 3: Mode C - Bilingual Comparison View -->
+          <div id="view-mode3" class="mode-view comparison-container hidden"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal: Terminology Dictionary -->
+  <div id="modal-terminology" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <h3>📖 Kamus Istilah Teknik Sipil & Akademik</h3>
+        <button class="modal-close" data-close="modal-terminology">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">
+          Kamus ini digunakan secara otomatis oleh Smart Translation Engine untuk menjamin konsistensi istilah teknik sipil (Struktur, Geoteknik, Hidro, Transportasi, Manajemen Konstruksi).
+        </p>
+
+        <!-- Search & Add Bar -->
+        <div class="term-controls-bar">
+          <input type="text" id="term-search-input" class="form-input" placeholder="Cari istilah (contoh: shear force, daktilitas, soil)...">
+          
+          <div class="term-add-row mt-2">
+            <input type="text" id="add-term-en" class="form-input" placeholder="Istilah Bahasa Inggris...">
+            <input type="text" id="add-term-id" class="form-input" placeholder="Istilah Bahasa Indonesia...">
+            <button id="btn-add-term" class="btn btn-primary btn-sm">+ Tambah Istilah</button>
+          </div>
+        </div>
+
+        <div class="term-table-wrapper">
+          <table class="term-table">
+            <thead>
+              <tr>
+                <th>English Term</th>
+                <th>Istilah Indonesia (Baku)</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="term-table-body">
+              <tr><td colspan="3" class="text-center">Memuat kamus istilah...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: API Settings -->
+  <div id="modal-settings" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>⚙️ Pengaturan Translation Provider & API</h3>
+        <button class="modal-close" data-close="modal-settings">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Pilih Provider Terjemahan:</label>
+          <select id="setting-provider-select" class="form-select">
+            <option value="google_free" selected>Google Translate (Free Engine - Tanpa API Key)</option>
+            <option value="deepl">DeepL API (Pro / Free Key - Kualitas Tertinggi)</option>
+          </select>
+        </div>
+
+        <div id="deepl-key-group" class="form-group hidden">
+          <label>DeepL API Key (Auth Key):</label>
+          <input type="password" id="setting-deepl-key" class="form-input" placeholder="Contoh: 12345678-xxxx-xxxx-xxxx-xxxxxxxxxxxx:fx">
+          <span class="subtext">Kunci API Anda tersimpan aman hanya di browser lokal Anda (LocalStorage) dan tidak dibagikan ke siapapun.</span>
+        </div>
+
+        <div class="alert-box info mt-2">
+          <strong>Catatan:</strong> Mesin bawaan (Google Free Engine) bekerja 100% tanpa biaya atau pendaftaran API key. Untuk pengguna yang memiliki akun DeepL API, Anda dapat memasukkan key untuk hasil yang lebih spesifik.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-save-settings" class="btn btn-primary">Simpan Pengaturan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="/static/js/translator.js"></script>
+</body>
+</html>

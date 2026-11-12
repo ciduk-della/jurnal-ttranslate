@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Corat-Coret PPT - Anotasi Presentasi Tanpa Lisensi</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Local PDF.js -->
+  <script src="/static/vendor/pdf.min.js"></script>
+</head>
+<body>
+  <div id="app" class="app-layout">
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <button id="btn-toggle-sidebar" class="btn-icon" title="Toggle Sidebar Slide (B)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <line x1="9" y1="3" x2="9" y2="21"/>
+          </svg>
+        </button>
+        <div class="logo">
+          <span class="logo-icon">✏️</span>
+          <span class="logo-text">Free Corat-Coret <strong>PPT</strong></span>
+          <span class="badge-free">GRATIS</span>
+        </div>
+        <nav class="app-nav-tabs">
+          <a href="/" class="nav-tab active">✏️ Corat-Coret PPT</a>
+          <a href="/translator" class="nav-tab">📚 AI Journal Translator</a>
+        </nav>
+        <div class="presentation-title-container">
+          <span id="presentation-title" class="presentation-title" title="Klik untuk mengubah judul">Belum ada file terbuka</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-open-file" class="btn btn-primary" title="Buka file presentasi baru (PPT, PPTX, PDF)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <span>Buka File</span>
+        </button>
+
+        <button id="btn-open-project" class="btn btn-outline" title="Buka proyek yang tersimpan">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span>Buka Proyek</span>
+        </button>
+
+        <button id="btn-save-project" class="btn btn-outline" title="Simpan data proyek dan coretan (Ctrl+S)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          <span>Simpan Proyek</span>
+        </button>
+
+        <button id="btn-export-pdf" class="btn btn-success" title="Ekspor slide beserta coretan menjadi PDF">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <span>Export PDF</span>
+        </button>
+
+        <button id="btn-help" class="btn-icon" title="Panduan & Pintasan Keyboard (?)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Annotation Toolbar -->
+    <nav class="annotation-toolbar" aria-label="Alat Anotasi">
+      <!-- Drawing Tools Group -->
+      <div class="tool-group">
+        <button id="tool-pen" class="tool-btn active" data-tool="pen" title="Pena Gambar Bebas (P)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+            <path d="M2 2l7.586 7.586"/>
+            <circle cx="11" cy="11" r="2"/>
+          </svg>
+          <span>Pena</span>
+        </button>
+
+        <button id="tool-highlighter" class="tool-btn" data-tool="highlighter" title="Highlighter Transparan (H)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m9 11-6 6v3h3l6-6"/>
+            <path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>
+          </svg>
+          <span>Highlighter</span>
+        </button>
+
+        <button id="tool-eraser" class="tool-btn" data-tool="eraser" title="Penghapus Coretan (E)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/>
+            <path d="M22 21H7"/>
+            <path d="m5 11 9 9"/>
+          </svg>
+          <span>Penghapus</span>
+        </button>
+
+        <button id="tool-text" class="tool-btn" data-tool="text" title="Tambahkan Teks (T)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="4 7 4 4 20 4 20 7"/>
+            <line x1="9" y1="20" x2="15" y2="20"/>
+            <line x1="12" y1="4" x2="12" y2="20"/>
+          </svg>
+          <span>Teks</span>
+        </button>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Shapes Tool Group -->
+      <div class="tool-group">
+        <button id="tool-line" class="tool-btn" data-tool="line" title="Garis Lurus (L)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" y1="20" x2="20" y2="4"/>
+          </svg>
+          <span>Garis</span>
+        </button>
+
+        <button id="tool-arrow" class="tool-btn" data-tool="arrow" title="Panah Penunjuk (A)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="19" x2="19" y2="5"/>
+            <polyline points="10 5 19 5 19 14"/>
+          </svg>
+          <span>Panah</span>
+        </button>
+
+        <button id="tool-rect" class="tool-btn" data-tool="rect" title="Persegi / Kotak (R)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          </svg>
+          <span>Kotak</span>
+        </button>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Colors & Presets -->
+      <div class="tool-group color-palette" title="Pilih Warna">
+        <button class="color-dot active" data-color="#e02424" style="background-color: #e02424;" title="Merah"></button>
+        <button class="color-dot" data-color="#2563eb" style="background-color: #2563eb;" title="Biru"></button>
+        <button class="color-dot" data-color="#059669" style="background-color: #059669;" title="Hijau"></button>
+        <button class="color-dot" data-color="#d97706" style="background-color: #d97706;" title="Kuning / Oranye"></button>
+        <button class="color-dot" data-color="#111827" style="background-color: #111827;" title="Hitam"></button>
+        <button class="color-dot" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid #cbd5e1;" title="Putih"></button>
+        <div class="custom-color-wrapper" title="Warna Kustom">
+          <input type="color" id="custom-color-picker" value="#e02424">
+        </div>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Stroke Width Controls -->
+      <div class="tool-group stroke-settings" title="Pengaturan Ketebalan">
+        <span class="toolbar-label">Tebal:</span>
+        <input type="range" id="stroke-width-slider" min="1" max="30" value="4">
+        <span id="stroke-width-value" class="stroke-val">4px</span>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- History & Actions -->
+      <div class="tool-group">
+        <button id="btn-undo" class="tool-btn" title="Undo (Ctrl+Z)" disabled>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 7v6h6"/>
+            <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/>
+          </svg>
+          <span>Undo</span>
+        </button>
+
+        <button id="btn-redo" class="tool-btn" title="Redo (Ctrl+Y)" disabled>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 7v6h-6"/>
+            <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/>
+          </svg>
+          <span>Redo</span>
+        </button>
+
+        <button id="btn-clear-slide" class="tool-btn btn-danger-soft" title="Hapus Semua Coretan Pada Slide Ini">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            <line x1="10" y1="11" x2="10" y2="17"/>
+            <line x1="14" y1="11" x2="14" y2="17"/>
+          </svg>
+          <span>Bersihkan</span>
+        </button>
+      </div>
+
+      <!-- Zoom Controls -->
+      <div class="toolbar-divider"></div>
+      <div class="tool-group zoom-controls">
+        <button id="btn-zoom-out" class="btn-icon-sm" title="Perkecil (-)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            <line x1="8" y1="11" x2="14" y2="11"/>
+          </svg>
+        </button>
+        <span id="zoom-level-text" class="zoom-text">100%</span>
+        <button id="btn-zoom-in" class="btn-icon-sm" title="Perbesar (+)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            <line x1="11" y1="8" x2="11" y2="14"/>
+            <line x1="8" y1="11" x2="14" y2="11"/>
+          </svg>
+        </button>
+        <button id="btn-zoom-fit" class="btn-icon-sm" title="Sesuaikan Lebar Layar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 3 21 3 21 9"/>
+            <polyline points="9 21 3 21 3 15"/>
+            <line x1="21" y1="3" x2="14" y2="10"/>
+            <line x1="3" y1="21" x2="10" y2="14"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Workspace Container -->
+    <div class="workspace-container">
+      <!-- Left Sidebar: Slide Thumbnails -->
+      <aside id="sidebar-thumbnails" class="sidebar">
+        <div class="sidebar-header">
+          <span class="sidebar-title">Slide Presentasi</span>
+          <span id="sidebar-slide-count" class="badge-count">0 Slide</span>
+        </div>
+        <div id="thumbnails-list" class="thumbnails-list" tabindex="0">
+          <div class="empty-thumbnails-message">
+            Belum ada presentasi terbuka.
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center Slide Stage -->
+      <main id="slide-stage" class="slide-stage">
+        <!-- Welcome / Dropzone Screen -->
+        <div id="welcome-screen" class="welcome-screen">
+          <div class="welcome-card">
+            <div class="welcome-icon">🎨</div>
+            <h2>Selamat Datang di Free Corat-Coret PPT</h2>
+            <p class="welcome-desc">
+              Buka presentasi PowerPoint atau dokumen PDF, lalu coret langsung di atas slide menggunakan pena, highlighter, teks, dan aneka bentuk shape secara gratis tanpa lisensi Microsoft Office.
+            </p>
+
+            <div id="dropzone" class="dropzone">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
+                <path d="M12 12v9"/>
+                <path d="m16 16-4-4-4 4"/>
+              </svg>
+              <h3>Tarik & Letakkan file presentasi di sini</h3>
+              <p>Mendukung format <strong>.PPTX</strong>, <strong>.PPT</strong>, dan <strong>.PDF</strong></p>
+              <button id="btn-browse-file" class="btn btn-primary btn-lg">Pilih File dari Komputer</button>
+              <input type="file" id="file-input" accept=".pptx,.ppt,.pdf" style="display: none;">
+            </div>
+
+            <div class="format-badges">
+              <span class="fmt-pill">PowerPoint (.pptx)</span>
+              <span class="fmt-pill">PowerPoint 97-2003 (.ppt)</span>
+              <span class="fmt-pill">Dokumen PDF (.pdf)</span>
+            </div>
+
+            <!-- LibreOffice Detection Banner -->
+            <div id="libreoffice-status-banner" class="status-banner info">
+              <span class="status-icon">ℹ️</span>
+              <span id="lo-status-text">Memeriksa ketersediaan LibreOffice untuk konversi PPT/PPTX...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide Canvas Viewer Container -->
+        <div id="viewer-container" class="viewer-container hidden">
+          <div id="canvas-wrapper" class="canvas-wrapper">
+            <!-- PDF Rendered Layer -->
+            <canvas id="pdf-canvas" class="slide-canvas"></canvas>
+            <!-- Annotation Interactive Layer -->
+            <canvas id="annotation-canvas" class="annotation-canvas"></canvas>
+            <!-- Cursor Overlay / Text floating input -->
+            <div id="text-input-overlay" class="text-input-overlay hidden">
+              <textarea id="annotation-text-input" placeholder="Ketik catatan di sini..."></textarea>
+              <div class="text-input-actions">
+                <button id="btn-text-submit" class="btn btn-primary btn-sm">OK</button>
+                <button id="btn-text-cancel" class="btn btn-outline btn-sm">Batal</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading Spinner Overlay -->
+        <div id="loading-overlay" class="loading-overlay hidden">
+          <div class="spinner"></div>
+          <div id="loading-message" class="loading-text">Sedang memproses dokumen...</div>
+          <div id="loading-subtext" class="loading-subtext">Mengonversi slide ke format tampilan</div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Bottom Navigation Footer -->
+    <footer class="app-footer">
+      <div class="footer-left">
+        <span id="status-autosave" class="status-indicator">
+          <span class="dot dot-success"></span>
+          <span id="autosave-text">Siap</span>
+        </span>
+      </div>
+
+      <div class="footer-center pagination-controls">
+        <button id="btn-prev-slide" class="btn-nav" title="Slide Sebelumnya (Panah Kiri)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          <span>Sebelumnya</span>
+        </button>
+
+        <div class="page-selector">
+          <span>Slide</span>
+          <input type="number" id="current-page-input" min="1" value="1">
+          <span>dari</span>
+          <span id="total-pages-display">0</span>
+        </div>
+
+        <button id="btn-next-slide" class="btn-nav" title="Slide Berikutnya (Panah Kanan)">
+          <span>Berikutnya</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <span class="footer-hint">Gunakan tombol panah ⬅️ ➡️ untuk berpindah slide</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modals -->
+
+  <!-- Modal: Buka Proyek Tersimpan -->
+  <div id="modal-projects" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Daftar Proyek Tersimpan</h3>
+        <button class="modal-close" data-close="modal-projects">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="projects-actions-bar">
+          <label class="btn btn-outline btn-sm">
+            <span>📥 Impor File Proyek (.json)</span>
+            <input type="file" id="import-project-file" accept=".json,.ccppt" style="display: none;">
+          </label>
+        </div>
+        <div id="projects-list" class="projects-list">
+          <div class="empty-state">Memuat daftar proyek...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Export PDF -->
+  <div id="modal-export" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Ekspor Presentasi</h3>
+        <button class="modal-close" data-close="modal-export">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="export-options">
+          <div class="export-card">
+            <h4>📄 Export ke File PDF</h4>
+            <p>Menggabungkan seluruh slide presentasi dengan goresan coretan dan catatan Anda ke dalam file PDF resolusi tinggi.</p>
+            <div class="export-notice">
+              <em>Catatan: Hasil ekspor adalah dokumen PDF beranotasi tetap, bukan file PPTX dengan objek bentuk Office asli.</em>
+            </div>
+            <button id="btn-confirm-export-pdf" class="btn btn-success btn-block mt-3">
+              Mulai Ekspor PDF
+            </button>
+          </div>
+
+          <div class="export-card mt-3">
+            <h4>💾 Unduh Cadangan Proyek (.ccppt.json)</h4>
+            <p>Simpan data goresan coretan agar dapat dibuka kembali dan diedit kapan saja melalui tombol "Buka Proyek".</p>
+            <button id="btn-download-project-json" class="btn btn-outline btn-block mt-3">
+              Unduh File Proyek
+            </button>
+          </div>
+        </div>
+
+        <div id="export-progress" class="export-progress hidden">
+          <div class="spinner-sm"></div>
+          <span id="export-status-message">Sedang merender halaman dan coretan...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: LibreOffice Info / Error -->
+  <div id="modal-libreoffice" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>ℹ️ Panduan Konversi PowerPoint</h3>
+        <button class="modal-close" data-close="modal-libreoffice">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert-box warning">
+          <strong>LibreOffice Belum Terdeteksi</strong>
+          <p>Untuk mengonversi file biner PowerPoint (.pptx / .ppt) secara langsung di server, sistem memerlukan LibreOffice command line tool (gratis & open-source).</p>
+        </div>
+
+        <h4>Cara Pasang LibreOffice (Gratis):</h4>
+        <ul>
+          <li><strong>Windows (via PowerShell/Terminal):</strong>
+            <pre><code>winget install TheDocumentFoundation.LibreOffice</code></pre>
+          </li>
+          <li><strong>Windows (Unduh Installer):</strong>
+            <p>Kunjungi <a href="https://www.libreoffice.org/download/download/" target="_blank" rel="noopener">libreoffice.org</a> lalu unduh dan pasang.</p>
+          </li>
+          <li><strong>Linux (Ubuntu/Debian):</strong>
+            <pre><code>sudo apt-get install libreoffice</code></pre>
+          </li>
+          <li><strong>macOS:</strong>
+            <pre><code>brew install --cask libreoffice</code></pre>
+          </li>
+        </ul>
+
+        <h4>Alternatif Cepat (Langsung Berfungsi Sekarang):</h4>
+        <p>Anda dapat membuka presentasi di PowerPoint / Google Slides, lalu pilih <strong>File &gt; Save As / Export to PDF</strong>. Kemudian unggah file PDF tersebut ke Free Corat-Coret PPT. Semua fitur anotasi, coretan, dan ekspor bekerja 100% langsung!</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-close="modal-libreoffice">Saya Mengerti</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Bantuan & Pintasan Keyboard -->
+  <div id="modal-help" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>⌨️ Pintasan Keyboard & Panduan Cepat</h3>
+        <button class="modal-close" data-close="modal-help">&times;</button>
+      </div>
+      <div class="modal-body">
+        <table class="shortcuts-table">
+          <thead>
+            <tr>
+              <th>Tombol</th>
+              <th>Fungsi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><kbd>P</kbd></td><td>Alat Pena (Bebas)</td></tr>
+            <tr><td><kbd>H</kbd></td><td>Alat Highlighter</td></tr>
+            <tr><td><kbd>E</kbd></td><td>Penghapus Coretan</td></tr>
+            <tr><td><kbd>T</kbd></td><td>Alat Teks</td></tr>
+            <tr><td><kbd>L</kbd> / <kbd>A</kbd> / <kbd>R</kbd></td><td>Garis / Panah / Kotak Persegi</td></tr>
+            <tr><td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td><td>Undo coretan</td></tr>
+            <tr><td><kbd>Ctrl</kbd> + <kbd>Y</kbd></td><td>Redo coretan</td></tr>
+            <tr><td><kbd>Ctrl</kbd> + <kbd>S</kbd></td><td>Simpan Proyek</td></tr>
+            <tr><td><kbd>⬅️</kbd> / <kbd>➡️</kbd></td><td>Slide Sebelumnya / Berikutnya</td></tr>
+            <tr><td><kbd>+</kbd> / <kbd>-</kbd></td><td>Zoom In / Out</td></tr>
+            <tr><td><kbd>B</kbd></td><td>Buka / Tutup Sidebar Thumbnail</td></tr>
+            <tr><td><kbd>?</kbd></td><td>Tampilkan Bantuan ini</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Application Scripts -->
+  <script src="/static/js/storage.js"></script>
+  <script src="/static/js/canvas.js"></script>
+  <script src="/static/js/pdf_viewer.js"></script>
+  <script src="/static/js/toolbar.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
+
